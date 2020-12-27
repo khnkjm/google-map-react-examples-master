@@ -1,35 +1,47 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
+import Marker from './Marker'
+import AnyReactComponent from './AnyReactComponent';
+// import MarkerInfoWindow from './MarkerInfoWindow';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const Map = () => {
 
-class Map extends Component {
-  static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
-    },
-    zoom: 11
-  };
+  const [center, setCenter] = useState({ lat: 59.95, lng: 30.33})
+  const [zoom, setZoom] = useState(11);
+  const [show, setShow] = useState('false');
 
-  render() {
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height: '100vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.Maps }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
-            text="My Marker"
-          />
-        </GoogleMapReact>
-      </div>
-    );
+  // Map.defaultProps = {
+  //   center: {
+  //     lat: 59.95,
+  //     lng: 30.33
+  //   },
+  //   zoom: 11,
+  //   show: false
+  // };
+  
+  // const [show, setShow] = useState('false');
+
+  const handleClose = () => this.setState({show: false})
+  const _onChildClick = (key, childProps) => {this.setState({ show: !show })}
+
+  return (
+    <div style={{ height: '100vh', width: '100%' }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: process.env.Maps }}
+        defaultCenter={center}
+        defaultZoom={zoom}
+        onChildClick={_onChildClick}
+      >
+      <Marker>
+        lat={ 59.95}
+        lng{ 30.33}
+        show={show}
+      </Marker>
+     
+      </GoogleMapReact>
+
+    </div>
+  );
   }
-}
 
 export default Map;
